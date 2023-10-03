@@ -11,7 +11,7 @@ string level1(vector<Day> earnings, vector<Day> payments) {
     string out{};
     if(earnings.size() != payments.size()) {
         cerr << "earnings and payments are not of the same size\n";
-        exit(1);
+        return{};
     }
 
     for(int i{}; i < earnings.size(); ++i) {
