@@ -3,6 +3,6 @@
 #include <vector>
 #include <felix.hpp>
 
-int level1(std::vector<Day> earnings, std::vector<Day> payments);
+int level1(std::vector<Day> payments, std::vector<Day> earnings);
 
 #endif
