@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int level1(vector<Day> payments, vector<Day> earnings) {
+int level1(vector<Day> earnings, vector<Day> payments) {
     if(earnings.size() != payments.size()) {
         cerr << "earnings and payments are not of the same size\n";
         exit(1);
