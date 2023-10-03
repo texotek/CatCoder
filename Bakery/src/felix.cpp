@@ -20,14 +20,12 @@ int main (int argc, char *argv[]) {
 
         if(text == "F") {
            file >> text;
-           Day d;
-           d.money = stoi(text);
+           Day d{stoi(text)};
            earnings[day] = d;
        }
        if(text == "B") {
            file >> text;
-           Day d;
-           d.money = stoi(text);
+           Day d{stoi(text)};
            payments[day] = d;
        }
     } while(file);
