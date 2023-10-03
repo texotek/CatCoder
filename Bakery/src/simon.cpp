@@ -6,7 +6,8 @@
 
 using namespace std;
 
-int level1(vector<Day> earnings, vector<Day> payments) {
+string level1(vector<Day> earnings, vector<Day> payments) {
+    string out{};
     if(earnings.size() != payments.size()) {
         cerr << "earnings and payments are not of the same size\n";
         exit(1);
@@ -14,8 +15,8 @@ int level1(vector<Day> earnings, vector<Day> payments) {
 
     for(int i{}; i < earnings.size(); ++i) {
         if(earnings[i].money > payments[i].money) {
-            return i+1;
+            out += to_string(i+1) + " ";
         }
     }
-    return -1;
+    return out;
 }
