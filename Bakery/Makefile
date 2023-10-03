@@ -1,6 +1,4 @@
-all: simon.o felix.o
+all: felix.o simon.o
 	g++ bin/simon.o bin/felix.o -o main
-simon.o: simon.cpp
-	g++ -c simon.cpp -o bin/simon.o
-felix.o: felix.cpp
-	g++ -c felix.cpp -o bin/felix.o
+%.o: %.cpp
+	g++ -c src/$< -o bin/$@ -I include/ -std=c++20
