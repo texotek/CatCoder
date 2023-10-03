@@ -13,7 +13,7 @@ int level1(vector<Day> earnings, vector<Day> payments) {
     }
 
     for(int i{}; i < earnings.size(); ++i) {
-        if(payments[i].money > earnings[i].money) {
+        if(earnings[i].money > payments[i].money) {
             return i+1;
         }
     }
