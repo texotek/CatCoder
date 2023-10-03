@@ -15,6 +15,8 @@ string level1(vector<Day> earnings, vector<Day> payments) {
     }
 
     for(int i{}; i < earnings.size(); ++i) {
+        cout << "comparing earning " << i+1 << " with " << earnings[i].money;
+        cout << " and payments with " << payments[i].money <<'\n';
         if(earnings[i].money > payments[i].money) {
             cout << "day " << i+1 << " added\n";
             out += to_string(i+1) + " ";
