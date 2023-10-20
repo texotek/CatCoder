@@ -11,7 +11,7 @@ public class App {
         for (File f : testfiles){
             if(f.getAbsolutePath().contains(".out")) continue;
             if(example && !f.getAbsolutePath().contains("example")) continue;
-            if(!f.getAbsolutePath().contains("2_1")) continue;
+            //if(!f.getAbsolutePath().contains("2_1")) continue;
 
             Scanner s = new Scanner(f);
             List<List<Character>> field = new ArrayList<>();

@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Field {
     public List<List<Character>> field;
@@ -14,11 +15,12 @@ public class Field {
         if (field.get(a.y()).get(a.x()) != 'L' || field.get(b.y()).get(b.x()) != 'L') {
             return false;
         }
-        return depthFirstSearch(new ArrayList<>(field), a,b);
+        ArrayList<List<Character>> copy = new ArrayList<>(field.stream().map(ArrayList::new).toList());
+        return depthFirstSearch(copy, a,b);
     }
     private static boolean depthFirstSearch(List<List<Character>> grid, Coordinate current, Coordinate target) {
 
-        System.out.println(printField(grid));
+//        System.out.println(printField(grid));
         int rows = grid.size();
         int cols = grid.get(0).size();
 
