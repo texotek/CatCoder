@@ -74,4 +74,33 @@ public class Field {
         }
         return sb.toString();
     }
+    public boolean isRouteValid(List<Coordinate> route) {
+        List<Line> lines = new ArrayList<>();
+        Set<Coordinate> visited = new HashSet<>();
+        for (int i = 0; i < route.size() - 1; i++) {
+            Coordinate current = route.get(i);
+            Coordinate next = route.get(i + 1);
+            lines.add(new Line(current, next));
+            if (!visited.add(current)) {
+                return false;
+            }
+        }
+        if (!visited.add(route.get(route.size() - 1))) {
+            return false;
+        }
+
+        for (int i = 0; i < lines.size(); i++) {
+            for (int j = i + 1; j < lines.size(); j++) {
+                if (lines.get(i).intersects(lines.get(j))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
+
 }

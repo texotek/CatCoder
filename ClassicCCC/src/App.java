@@ -3,9 +3,9 @@ import java.io.*;
 public class App {
 
     public static boolean example = false;
-    public static int level = 2;
+    public static int level = 3;
     public static void main(String[]args) throws Exception {
-        File level = new File("level2");
+        File level = new File("level3");
         File[] testfiles = level.listFiles();
 
         for (File f : testfiles){
@@ -30,23 +30,26 @@ public class App {
 
 
             Field fieldO = new Field(field);
-            int numOfCoordiantes = s.nextInt();
+            // ...
+            int numOfRoutes = s.nextInt();
             s.nextLine();
             try (BufferedWriter outfile = new BufferedWriter(new FileWriter(f.getAbsolutePath().replace(".in", ".out")))) {
-                for(int i = 0; i < numOfCoordiantes; i++) {
+                for(int i = 0; i < numOfRoutes; i++) {
                     String[] coordinates = s.nextLine().split(" ");
-                    String[] a = coordinates[0].split(",");
-                    String[] b = coordinates[1].split(",");
-                    Coordinate ac = new Coordinate(Integer.parseInt(a[0]), Integer.parseInt(a[1]));
-                    Coordinate bc = new Coordinate(Integer.parseInt(b[0]), Integer.parseInt(b[1]));
+                    List<Coordinate> route = new ArrayList<>();
+                    for (String coordinate : coordinates) {
+                        String[] parts = coordinate.split(",");
+                        route.add(new Coordinate(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+                    }
 
-                    if(fieldO.isOnSame(ac, bc)) {
-                        outfile.write("SAME\n");
+                    if(fieldO.isRouteValid(route)) {
+                        outfile.write("VALID\n");
                     } else {
-                        outfile.write("DIFFERENT\n");
+                        outfile.write("INVALID\n");
                     }
                 }
             }
+
         }
     }
 
