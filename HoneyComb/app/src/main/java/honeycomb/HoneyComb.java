@@ -2,7 +2,8 @@ package honeycomb;
 
 import java.util.ArrayList;
 
-import org.checkerframework.framework.qual.PostconditionAnnotation;
+import com.google.common.graph.Graph;
+import com.google.common.graph.GraphBuilder;
 
 public class HoneyComb {
     public ArrayList<String> field = new ArrayList<>();
@@ -53,7 +54,15 @@ public class HoneyComb {
         return false;
     }
     public boolean canWaspEscapeSmart() {
-        Position wasp = this.getWaspPosition();
+        //Position wasp = this.getWaspPosition();
+        Graph<Comb> g = GraphBuilder.undirected().build();
+        for (int i = 0; i < field.size(); i++) {
+            for (int j = 0; j < field.get(0).length(); j++) {
+                if(field.get(i).charAt(j) == '-') continue;
+                System.out.println(g.nodes());
+                g.nodes().add(new Comb(field.get(i).charAt(j), new Position(i, j), false));
+            } 
+        }
 
         
         return false;
@@ -123,6 +132,11 @@ public class HoneyComb {
 
 
 
+        return false;
+    }
+    public boolean isOnEdge(Position p) {
+        if(p.x() == 0 || field.size() - 1 == p.x()) return true;
+        if(p.y() == 0 || field.get(0).length() - 1 == p.y()) return true;
         return false;
     }
     public boolean isOnEdge(Position p, Direction dir) {

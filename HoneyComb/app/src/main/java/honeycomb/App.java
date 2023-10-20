@@ -42,7 +42,7 @@ public class App {
                     int count = 1;
                     for (HoneyComb co : honeyCombs) {
                         System.out.println(count);
-                        if(co.canWaspEscapeLinear()) writer.write("FREE");
+                        if(co.canWaspEscapeSmart()) writer.write("FREE");
                         else writer.write("TRAPPED");
                         writer.newLine();
                         count++;
