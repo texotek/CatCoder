@@ -1,106 +1,72 @@
 import java.util.*;
-import java.util.stream.Collectors;
-
 public class Field {
-    public List<List<Character>> field;
+    private final List<List<Character>> field;
 
     public Field(List<List<Character>> field) {
         this.field = field;
     }
-    public char getType(int x, int y) {
-        return this.field.get(y).get(x);
-    }
+    public List<Coordinate> findPath(Coordinate start, Coordinate end) {
+        Map<Coordinate, Node> nodes = new HashMap<>();
+        PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingDouble(Node::getEstimatedCost));
+        Map<Coordinate, Coordinate> parents = new HashMap<>();
 
-    public boolean isOnSame(Coordinate a, Coordinate b) {
-        if (field.get(a.y()).get(a.x()) != 'L' || field.get(b.y()).get(b.x()) != 'L') {
-            return false;
-        }
-        ArrayList<List<Character>> copy = new ArrayList<>(field.stream().map(ArrayList::new).toList());
-        return depthFirstSearch(copy, a,b);
-    }
-    private static boolean depthFirstSearch(List<List<Character>> grid, Coordinate current, Coordinate target) {
+        Node startNode = new Node(start, 0, getEstimatedCost(start, end));
+        nodes.put(start, startNode);
+        openSet.add(startNode);
 
-//        System.out.println(printField(grid));
-        int rows = grid.size();
-        int cols = grid.get(0).size();
-
-        int x = current.x();
-        int y = current.y();
-
-        if (y < 0 || y >= rows || x < 0 || x >= cols || grid.get(y).get(x) == 'W' || grid.get(y).get(x) == 'X') {
-            return false;
-        }
-
-        if (current.equals(target)) {
-            return true;
-        }
-
-        grid.get(y).set(x, 'X'); // Mark the current cell as visited
-
-        // Recursively check adjacent cells
-        List<Coordinate> adjacentCoordinates = List.of(
-                new Coordinate(x - 1, y),
-                new Coordinate(x + 1, y),
-                new Coordinate(x, y - 1),
-                new Coordinate(x, y + 1)
-        );
-
-        for (Coordinate neighbor : adjacentCoordinates) {
-            if (depthFirstSearch(grid, neighbor, target)) {
-                return true;
+        while (!openSet.isEmpty()) {
+            Node currentNode = openSet.poll();
+            if (currentNode.getCoordinate().equals(end)) {
+                return reconstructPath(nodes, parents, start, end);
             }
-        }
 
-        return false;
-    }
-    public static String printField(List<List<Character>> field) {
-        StringBuilder sb = new StringBuilder();
-        for (List<Character> row : field) {
-            for (Character c : row) {
-                sb.append(c);
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (List<Character> row : field) {
-            for (Character c : row) {
-                sb.append(c);
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-    public boolean isRouteValid(List<Coordinate> route) {
-        List<Line> lines = new ArrayList<>();
-        Set<Coordinate> visited = new HashSet<>();
-        for (int i = 0; i < route.size() - 1; i++) {
-            Coordinate current = route.get(i);
-            Coordinate next = route.get(i + 1);
-            lines.add(new Line(current, next));
-            if (!visited.add(current)) {
-                return false;
-            }
-        }
-        if (!visited.add(route.get(route.size() - 1))) {
-            return false;
-        }
+            for (Coordinate neighbor : getNeighbors(currentNode.getCoordinate())) {
+                if (this.field.get(neighbor.getY()).get(neighbor.getX()) == 'L') {
+                    continue;
+                }
 
-        for (int i = 0; i < lines.size(); i++) {
-            for (int j = i + 1; j < lines.size(); j++) {
-                if (lines.get(i).intersects(lines.get(j))) {
-                    return false;
+                double newCost = currentNode.getCost() + 1;
+                Node neighborNode = nodes.getOrDefault(neighbor, new Node(neighbor, Double.MAX_VALUE, 0));
+                if (newCost < neighborNode.getCost()) {
+                    neighborNode.setCost(newCost);
+                    neighborNode.setEstimatedCost(newCost + getEstimatedCost(neighbor, end));
+                    nodes.put(neighbor, neighborNode);
+                    openSet.add(neighborNode);
+                    parents.put(neighbor, currentNode.getCoordinate());
                 }
             }
         }
 
-        return true;
+        return null;
+    }
+
+    private List<Coordinate> reconstructPath(Map<Coordinate, Node> nodes, Map<Coordinate, Coordinate> parents, Coordinate start, Coordinate end) {
+        List<Coordinate> path = new ArrayList<>();
+        Coordinate current = end;
+        while (current != null) {
+            path.add(0, current);
+            current = parents.get(current);
+        }
+        return path;
     }
 
 
+    private double getEstimatedCost(Coordinate from, Coordinate to) {
+        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+    }
 
-
+    private List<Coordinate> getNeighbors(Coordinate coordinate) {
+        int[] dx = {-1, 0, 1, -1, 1, -1, 1, 0};
+        int[] dy = {-1, -1, -1, 0, 0, 1, 1, 1};
+        List<Coordinate> neighbors = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            int newX = coordinate.getX() + dx[i];
+            int newY = coordinate.getY() + dy[i];
+            if (newX >= 0 && newX < field.get(0).size() && newY >= 0 && newY < field.size() &&
+                    field.get(newY).get(newX) == 'W') {
+                neighbors.add(new Coordinate(newX, newY));
+            }
+        }
+        return neighbors;
+    }
 }

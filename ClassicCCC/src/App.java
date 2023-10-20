@@ -1,11 +1,13 @@
 import java.util.*;
 import java.io.*;
+import java.util.stream.Collectors;
+
 public class App {
 
     public static boolean example = false;
-    public static int level = 3;
+    public static int level = 4;
     public static void main(String[]args) throws Exception {
-        File level = new File("level3");
+        File level = new File("level4");
         File[] testfiles = level.listFiles();
 
         for (File f : testfiles){
@@ -14,7 +16,7 @@ public class App {
             //if(!f.getAbsolutePath().contains("2_1")) continue;
 
             Scanner s = new Scanner(f);
-            List<List<Character>> field = new ArrayList<>();
+            List<List<Character>> fieldList = new ArrayList<>();
 
             int length = s.nextInt();
 
@@ -25,30 +27,27 @@ public class App {
                 for(int j = 0; j < line.length(); j++) {
                     row.add(line.charAt(j));
                 }
-                field.add(row);
+                fieldList.add(row);
             }
 
 
-            Field fieldO = new Field(field);
-            // ...
+            Field field = new Field(fieldList);
             int numOfRoutes = s.nextInt();
             s.nextLine();
             try (BufferedWriter outfile = new BufferedWriter(new FileWriter(f.getAbsolutePath().replace(".in", ".out")))) {
-                for(int i = 0; i < numOfRoutes; i++) {
+                for (int i = 0; i < numOfRoutes; i++) {
                     String[] coordinates = s.nextLine().split(" ");
-                    List<Coordinate> route = new ArrayList<>();
-                    for (String coordinate : coordinates) {
-                        String[] parts = coordinate.split(",");
-                        route.add(new Coordinate(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
-                    }
-
-                    if(fieldO.isRouteValid(route)) {
-                        outfile.write("VALID\n");
+                    Coordinate start = new Coordinate(Integer.parseInt(coordinates[0].split(",")[0]), Integer.parseInt(coordinates[0].split(",")[1]));
+                    Coordinate end = new Coordinate(Integer.parseInt(coordinates[1].split(",")[0]), Integer.parseInt(coordinates[1].split(",")[1]));
+                    List<Coordinate> path = field.findPath(start, end);
+                    if (path != null) {
+                        outfile.write(String.join(" ", path.stream().map(Coordinate::toString).collect(Collectors.toList())) + "\n");
                     } else {
-                        outfile.write("INVALID\n");
+                        outfile.write("NO VALID ROUTE\n");
                     }
                 }
             }
+
 
         }
     }

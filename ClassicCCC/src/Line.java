@@ -8,10 +8,10 @@ public class Line {
     }
 
     public boolean intersects(Line other) {
-        double x1 = this.start.x(), y1 = this.start.y();
-        double x2 = this.end.x(), y2 = this.end.y();
-        double x3 = other.start.x(), y3 = other.start.y();
-        double x4 = other.end.x(), y4 = other.end.y();
+        double x1 = this.start.getX(), y1 = this.start.getY();
+        double x2 = this.end.getX(), y2 = this.end.getY();
+        double x3 = other.start.getX(), y3 = other.start.getY();
+        double x4 = other.end.getX(), y4 = other.end.getY();
 
         // Calculate the slopes of the lines
         double a1 = (y2 - y1) / (x2 - x1);
