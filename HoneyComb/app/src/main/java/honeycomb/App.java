@@ -20,7 +20,6 @@ public class App {
 
         for (File file : files) {
             if(file.getName().contains(".out")) continue;
-            //if(!file.getName().contains("level3_3.in")) continue;
             System.out.println(file.getName() + "\n");
             try (Scanner s = new Scanner(new FileReader(file))) {
                 int honeyCombCount = Integer.parseInt(s.nextLine());
@@ -42,7 +41,7 @@ public class App {
                     int count = 1;
                     for (HoneyComb co : honeyCombs) {
                         System.out.println(count);
-                        if(co.canWaspEscapeSmart()) writer.write("FREE");
+                        if(co.canWaspEscapeSmart(co.getWaspPosition())) writer.write("FREE");
                         else writer.write("TRAPPED");
                         writer.newLine();
                         count++;

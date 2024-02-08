@@ -1,9 +1,6 @@
 package honeycomb;
 
-import java.util.ArrayList;
-
-import com.google.common.graph.Graph;
-import com.google.common.graph.GraphBuilder;
+import java.util.*;
 
 public class HoneyComb {
     public ArrayList<String> field = new ArrayList<>();
@@ -53,20 +50,36 @@ public class HoneyComb {
         }
         return false;
     }
-    public boolean canWaspEscapeSmart() {
-        //Position wasp = this.getWaspPosition();
-        Graph<Comb> g = GraphBuilder.undirected().build();
-        for (int i = 0; i < field.size(); i++) {
-            for (int j = 0; j < field.get(0).length(); j++) {
-                if(field.get(i).charAt(j) == '-') continue;
-                System.out.println(g.nodes());
-                g.nodes().add(new Comb(field.get(i).charAt(j), new Position(i, j), false));
-            } 
-        }
+    public boolean canWaspEscapeSmart(Position start) {
+        Stack<Position> stack = new Stack<>();
+        Set<Position> visited = new HashSet<>();
 
-        
+        stack.push(start);
+        while(!stack.empty()) {
+            Position current = stack.pop();
+
+            if(current.x() < 0
+            || current.y() < 0
+            || current.x() > this.field.size() - 1
+            || current.y() > this.field.get(current.x()).length() - 1
+            || this.field.get(current.x()).charAt(current.y()) == 'X'
+            || visited.contains(current)
+            ) continue;
+
+            visited.add(current);
+
+            if(isOnEdge(current)) return true;
+
+            stack.push(new Position(current.x() , current.y() - 2));
+            stack.push(new Position(current.x() , current.y() + 2));
+            stack.push(new Position(current.x() + 1 , current.y() + 1));
+            stack.push(new Position(current.x() - 1 , current.y() - 1));
+            stack.push(new Position(current.x() + 1 , current.y() - 1));
+            stack.push(new Position(current.x() - 1 , current.y() + 1));
+        }
         return false;
     }
+
     public boolean canWaspEscapeLinear() {
         Position waPosition = this.getWaspPosition();
         if(countEmptyCell(waPosition) == 0) return false;
